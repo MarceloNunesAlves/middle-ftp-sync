@@ -22,6 +22,10 @@ def download_file(path_file, location):
     filename = path_file.split("/")[-1]
 
     # Caminho onde será salvo o arquivo
+    path_dest_full = path_dest + "/" + location
+    if not os.path.exists(path_dest_full):
+        os.makedirs(path_dest_full)
+
     local_path = path_dest + "/" + location + "/" + filename
 
     # Copia o arquivo do servidor para o diretório atual
