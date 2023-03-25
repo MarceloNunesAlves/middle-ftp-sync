@@ -1,3 +1,5 @@
+from process_log import config_log
+
 # Import Module
 import paramiko
 import os
@@ -8,6 +10,8 @@ host = os.getenv("SSH_HOSTNAME", "192.168.0.1")
 username = os.getenv("SSH_USERNAME", "user")
 password = os.getenv("SSH_PASSWORD", "pass")
 path_dest = os.getenv("SSH_PATH_DEST_VIDEO", "/home/local_user/")
+
+logger = config_log(__name__)
 
 def download_file(path_file, location):
 
@@ -58,3 +62,5 @@ def convert_video(local_tmp, local_path):
         .overwrite_output()
         .run()
     )
+
+    logger.info(f"Arquivo convertido: {local_path}")
