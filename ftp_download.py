@@ -31,36 +31,16 @@ def download_file(path_file, location):
     if not os.path.exists(path_dest_full):
         os.makedirs(path_dest_full)
 
-    path_dest_temp_full = path_dest + "/temp/" + location
-    if not os.path.exists(path_dest_temp_full):
-        os.makedirs(path_dest_temp_full)
-
     local_path = path_dest + "/" + location + "/" + filename
-    local_tmp = path_dest + "/temp/" + location + "/" + filename
 
     # Copia o arquivo do servidor para o diretório atual
     ftp_client = ssh_client.open_sftp()
-    ftp_client.get(remote_path, local_tmp)
+    ftp_client.get(remote_path, local_path)
 
     # Fecha a conexão com o servidor SSH e o cliente SFTP
     ftp_client.close()
     ssh_client.close()
 
-    convert_video(local_tmp, local_path)
+    logger.info(f"Arquivo carregado: {local_path}")
 
     return local_path
-
-def convert_video(local_tmp, local_path):
-    input_file = local_tmp
-    output_file = local_path
-
-    # Configura o processo de conversão
-    (
-        ffmpeg
-        .input(input_file)
-        .output(output_file, vcodec="h264", acodec="aac", strict="experimental")
-        .overwrite_output()
-        .run()
-    )
-
-    logger.info(f"Arquivo convertido: {local_path}")
